@@ -7,7 +7,7 @@ import os
 import time
 import tempfile
 import platform
-import pynput.keyboard
+#import pynput.keyboard
 from typing import Optional
 # from ctypes import *
 
@@ -34,7 +34,7 @@ class WhisperMic:
         self.save_file = save_file
         self.verbose = verbose
         self.english = english
-        self.keyboard = pynput.keyboard.Controller()
+        self.keyboard = None #pynput.keyboard.Controller()
 
         self.platform = platform.system().lower()
         if self.platform == "darwin":
