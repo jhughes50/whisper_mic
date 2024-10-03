@@ -138,6 +138,14 @@ class WhisperMic:
             self.result_queue.put_nowait("Speech recognition could not understand audio.")
 
 
+    def record_once(self, duration=2, offset=None):
+        with self.source as microphone:
+            audio = self.recorder.record(source=microphone, duration=duration, offset=offset)
+
+        data = audio.get_raw_data()
+        audio_data = self.__get_all_audio()
+        result = self.__transcribe(data=audio_data)
+
     # This method is similar to the __listen_handler() method but it has the added ability for recording the audio for a specified duration of time
     def __record_handler(self, duration=2, offset=None):
         with self.source as microphone:
@@ -184,18 +192,15 @@ class WhisperMic:
 
             if not self.verbose:
                 if predicted_text not in self.banned_results:
-                    self.result_queue.put_nowait(predicted_text)
+                    return predicted_text
             else:
-                if predicted_text not in self.banned_results:
-                    self.result_queue.put_nowait(result)
-
-
+                return predicted_text
             if self.save_file:
                 # os.remove(audio_data)
                 self.file.write(predicted_text)
         else:
             # If the audio is not loud enough, we put None in the queue to indicate that we need to listen again or return None
-            self.result_queue.put_nowait(None)
+            return " "
 
     async def listen_loop_async(self, dictate: bool = False, phrase_time_limit=None) -> Optional[str]:
         for result in self.listen_continuously(phrase_time_limit=phrase_time_limit):
