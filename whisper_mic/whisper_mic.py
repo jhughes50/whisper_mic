@@ -140,11 +140,15 @@ class WhisperMic:
 
     def record_once(self, duration=2, offset=None):
         with self.source as microphone:
+            print("before record")
             audio = self.recorder.record(source=microphone, duration=duration, offset=offset)
-
+            print("before get raw")
         data = audio.get_raw_data()
+        print("before get all audio")
         audio_data = self.__get_all_audio()
+        print("before transcribe")
         result = self.__transcribe(data=audio_data)
+        print("before return")
         return result
 
     # This method is similar to the __listen_handler() method but it has the added ability for recording the audio for a specified duration of time
