@@ -145,6 +145,7 @@ class WhisperMic:
         data = audio.get_raw_data()
         audio_data = self.__get_all_audio()
         result = self.__transcribe(data=audio_data)
+        return result
 
     # This method is similar to the __listen_handler() method but it has the added ability for recording the audio for a specified duration of time
     def __record_handler(self, duration=2, offset=None):
